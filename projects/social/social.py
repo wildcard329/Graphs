@@ -1,4 +1,7 @@
 import random
+import sys
+sys.path.append('../graph/')
+from util import Stack, Queue
 
 class User:
     def __init__(self, name):
@@ -105,6 +108,26 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        q = Queue()
+
+        q.enqueue([user_id])
+
+        while q.size() > 0:
+            p = q.dequeue()
+            v = p[-1]
+
+            if v not in visited:
+                visited[v] = p
+
+                for f in self.friendships[v]:
+                    if f not in visited:
+                        q.enqueue(p + [f])
+
+        # print(self.friendships[user_id])
+        # for friends in self.friendships:
+        #     print(friends)
+        # for result in self.users:
+        #     print(self.result.friendships)
         return visited
 
 
