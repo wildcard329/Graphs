@@ -2,9 +2,7 @@ import sys
 sys.path.append('../graph/')
 from util import Stack, Queue
 
-
 def earliest_ancestor(ancestors, starting_node):
-    # print(ancestors, starting_node)
     chart = {}
 
     q = Queue()
@@ -32,4 +30,3 @@ def earliest_ancestor(ancestors, starting_node):
         for node in chart.get(v):
             if node is not None:
                 q.enqueue(p + [node])
-    

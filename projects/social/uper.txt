@@ -1,0 +1,34 @@
+understand 
+    friend-based social network
+        users are able to view their friends, and their friends' friends
+        people connected to each other through any number of friendship connections are considered part of extended social network
+    
+    functionality for adding users and friendships already implemented
+        *** job to implement a function that shows all the friends in a user's extended group and the chain of friendships that linke them
+        number of connections between one user and another are called degrees of separation
+
+    how will performance scale as more users join?
+        *** implement feature that creates large numbers of users to the network and assign them a random distribution of friends
+        
+
+    when users are created, they also should have friendships. The users are held in a dictionary data structure and their friends are contained in a set.
+    users are created through the populate_graph function, the first parameter is the number of users that are being created and the second parameter is the number of friends an average user should have
+        in the example of pg(10, 2), a user could have anywhere between 0 and 4 friends
+        can be done by picking friends randomly or shuffling the friends list and selecting the top N friends
+
+    get_all_social_paths() takes a user parameter and returns a dictionary with the user's connections to all those users through friendships
+        get_all_social_paths(1) returns {1: [1], 8, [1, 8], 10: [1, 10], 5: [1, 5], 2: [1, 10, 2], 6: [1, 10, 6], 7: [1, 10, 2, 7]}
+        the value in the dictionary is a comma separated list of users
+        the max number of total friendships is the number of friends times the average number of friendships
+        the max number of friendships is the average number of friendships times two
+        the min number of friendships is zero
+        the actual number of friendships should not exceed the total max number of friendships
+
+
+plan
+    for creating users, all I need to do is iterate over a range of users that are passed into the function
+    for adding friendships, I need to multiply users by the average number of friendships, then every user can have up to double the average amount of friendships, but the total number of friendships cannot exceed the max number of friendships
+        assign each user a number randomly between zero and twice the number of average friendships
+            random numbers must add up to max total friendships
+        for each incrementation of the random assignment, I shuffle the list of useres and create a friendship for the user N times
+        use bfs to find shortest path between users
