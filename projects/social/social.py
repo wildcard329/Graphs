@@ -54,17 +54,24 @@ class SocialGraph:
             self.add_user(user)
 
         # Create friendships
-        max_friendships = num_users * avg_friendships
+
+        max_friendships = num_users * avg_friendships // 2
         assignments = []
         friendpool = [user for user in self.users]
+        user_to_friends = {}
 
         while max_friendships != 0:
             num_friends = random.randrange(avg_friendships * 2 - 1)
             assignments.append(num_friends)
             max_friendships -= num_friends
             if max_friendships < 0:
-                max_friendships = num_users * avg_friendships
+                max_friendships = num_users * avg_friendships // 2
                 assignments = []
+            if max_friendships == 0 and len(assignments) != num_users:
+                counter = num_users - len(assignments)
+                while counter > 0:
+                    assignments.append(0)
+                    counter -= 1
             if len(assignments) == num_users:
                 while max_friendships > 0:
                     for num in range(len(assignments)):
@@ -73,29 +80,22 @@ class SocialGraph:
                             assignments[num] += 1
                             max_friendships -= 1
 
-        # print(assignments)
-        # print(len(assignments))
-        print(friendpool)
-        print(friendpool)
-        # print(fp_copy)
+        for i in range(len(friendpool)):
+            user_to_friends[friendpool[i]] = assignments[i]
+
         for user in self.users:
-            fp_copy = friendpool
+            fp_copy = friendpool[:]
             random.shuffle(fp_copy)
-
-            counter = assignments[-1]
-            # fp_copy.remove(user)
-
-            while counter > 0 and len(fp_copy) > 0:
-                self.add_friendship(user, fp_copy[-1])
+            if user_to_friends[user] == 0:
+                pass
+            counter = user_to_friends[user]
+            while counter > 0:
+                new_friend = fp_copy[-1]
+                if new_friend != user and new_friend not in self.friendships[user]:
+                    self.add_friendship(user, new_friend)
+                    fp_copy.pop()
+                    counter -= 1
                 fp_copy.pop()
-                counter -= 1
-
-            assignments.pop()
-            fp_copy = friendpool
-
-            #     self.add_friendship(user, )
-                
-            # print(f"user: {user}, friendships: {user_num_friendships}")
 
     def get_all_social_paths(self, user_id):
         """
@@ -123,17 +123,13 @@ class SocialGraph:
                     if f not in visited:
                         q.enqueue(p + [f])
 
-        # print(self.friendships[user_id])
-        # for friends in self.friendships:
-        #     print(friends)
-        # for result in self.users:
-        #     print(self.result.friendships)
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    # sg.populate_graph(10, 2)
+    sg.populate_graph(5000, 5)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
