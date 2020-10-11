@@ -1,0 +1,351 @@
+    if '?' not in directions[player.current_room.id].values():
+        print("exits: ",player.current_room.get_exits())
+        input('search')
+        q = Queue()
+        seen = set()
+        marker = player.current_room
+        print(f"Marker: {marker.id}")
+        print(f"Exits: {directions[marker.id]}")
+        seen.add(marker.id)
+        if '?' in directions[marker.id].values():
+            break
+
+        for e in directions[player.current_room.id]:
+            # print(f"direction: {e}")
+            q.enqueue([e])
+            
+        while q.size() > 0 and '?' not in directions[marker.get_room_in_direction(e).id]:
+            p = q.dequeue()
+            v = p[-1]
+            # print('v: ',v)
+            # print('pcr: ',player.current_room.id)
+            # print('marker: ',marker.id)
+            if v in marker.get_exits() and marker.get_room_in_direction(v).id in directions:
+                marker = marker.get_room_in_direction(v)
+            # print('pcr: ',player.current_room.id)
+            # print('marker: ',marker.id)
+            # print(v)
+            # print(player.current_room.id)
+            if marker.id not in seen:
+                seen.add(marker.id)
+                if '?' in directions[marker.id]:
+                    print(f"{marker.id} has exits")
+                    traversal_path.extend(path)
+                    for d in path:
+                        player.travel(d)
+                        print(f"traversal path: {traversal_path}")
+                    while q.size() > 0:
+                        q.dequeue()
+                        print('p: ',p)
+                exits = marker.get_exits()
+                # print('exits: ',exits)
+                for e in exits:
+                    if marker.get_room_in_direction(e).id not in directions:
+                        print('flag',marker.get_room_in_direction(e).id)
+                        for d in p:
+                            player.travel(d)
+                            print(f"traversal path: {traversal_path}")
+                        while q.size() > 0:
+                            q.dequeue()
+                            break
+
+                    if marker.get_room_in_direction(e).id not in seen:
+
+                        print('seen: ',seen)
+                        print('c_room: ',marker.id)
+                        print('exits: ', directions[marker.id])
+                        print('n_room: ',marker.get_room_in_direction(e).id)
+                        print('path: ',p)
+                        # print(f"cur_path: {p}, dir: {e}")
+                        q.enqueue(p + [e])
+                        # print(directions[marker.get_room_in_direction])
+                    if '?' in directions[marker.get_room_in_direction(e).id].values():
+                        print('player_room: ',marker.id)
+                        print("room: ",directions[marker.get_room_in_direction(e).id])
+                        path = p + [e]
+                        print(f"path: {p}")
+                        traversal_path.extend(path)
+                        for d in path:
+                            player.travel(d)
+                            print(f"traversal path: {traversal_path}")
+                        while q.size() > 0:
+                            q.dequeue()
+
+            # for direction in get_unexplored_room(player.current_room.id):
+            #     traversal_path.append(direction)
+            #     player.travel(direction)
+            #     if player.current_room.get_room_in_direction(direction) not in directions:
+            #         print('room: ',player.current_room.id)
+            #         print(direction)
+                # print('room: ',player.current_room.id)
+                # print('next room: ',player.current_room.get_room_in_direction(direction).id)
+                # print('direction: ',direction)
+                # print('exits: ',directions[player.current_room.id])
+                # print('map: ',directions)
+                # input('search')
+
+    # if '?' not in directions[player.current_room.id].values():
+    #     marker = player.current_room
+    #     print('explore: ',explore(marker))
+    #     for direction in explore(marker):
+    #         traversal_path.append(direction)
+    #         player.travel(direction)
+    # else:
+    #     counter = 0
+    #     explored_exits = []
+    #     path = []
+    #     if '?' in directions[player.current_room.id]:
+    #         for direction in path:
+    #             traversal_path.append(direction)
+    #             print('appending: ',direction)
+    #             print('t_path: ',traversal_path)
+    #         path = []
+    #     elif counter > 5:
+    #         player.current_room = room 
+    #         path = []
+    #     room = player.current_room
+    #     for e in player.current_room.get_exits():
+    #         explored_exits.append(e)
+    #     rand_exit_no2 = random.randrange(len(explored_exits))
+    #     p_exit = explored_exits[rand_exit_no2]
+    #     player.travel(p_exit)
+    #     path.append(p_exit)
+    #     print('room: ', room.id)
+    #     print('path: ', path)
+    #     counter += 1
+        # if get_unexplored_room(player.current_room.id) is None:
+        #     counter = 0
+        #     exits = player.current_room.get_exits()
+        #     rand_num = random.randrange(len(exits))
+        #     rand_exit = player.current_room.get_exits()[rand_num]
+        #     while counter < 5:
+        #         player.travel(rand_exit)
+        #         traversal_path.append(rand_exit)
+        #         counter += 1
+        # print('pcr: ',player.current_room.id)
+        # marker = player.current_room
+        # input(marker.id)
+        # print(search_exits(marker))
+        # while search_exits(marker) is None:
+        #     search_exits(marker)
+        # for direction in search_exits(marker):
+        #     traversal_path.append(direction)
+        #     player.travel(direction)
+
+        # input('search')
+        # marker = player.current_room
+        # print(f"Marker: {marker}")
+        # for direction in find_new_exit(marker):
+        #     traversal_path.append(direction)
+        #     player.travel(direction)
+        # q = Queue()
+        # seen = set()
+        # exits = marker.get_exits()
+
+        # for e in exits:
+        #     input(e)
+        #     q.enqueue([e])
+
+        # while check_room_for_exits(marker) is False and q.size() > 0:
+        #     p = q.dequeue()
+        #     v = p[-1]
+        #     print('unexplored is false')
+
+        #     if marker.get_room_in_direction(v) not in seen and marker.get_room_in_direction(v) is not None:
+        #         seen.add(marker.get_room_in_direction(v))
+        #         marker = marker.get_room_in_direction(v)
+
+        #         for e in marker.get_exits():
+        #             if marker.get_room_in_direction(e) not in seen:
+        #                 q.enqueue(p + [e])
+
+        #             if check_room_for_exits(marker) is True:
+        #                 print('check')
+        #                 print('p: ',p)
+        #                 print('path: ',traversal_path)
+        #                 print('mcr: ',marker.id)
+        #                 print('pcr: ',player.current_room.id)
+        #                 input()
+        #                 for direction in p:
+        #                     traversal_path.append(direction)
+        #                     player.travel(direction)
+        #                 break
+
+    # def check_room_for_exits(room):
+    #     if '?' in directions[room.id].values():
+    #         return True
+    #     return False
+        
+    # if check_room_for_exits(player.current_room) is False:
+        # explored_exits = []
+        # for e in player.current_room.get_exits():
+        #     explored_exits.append(e)
+        # rand_exit_no2 = random.randrange(len(explored_exits))
+        # p_exit = explored_exits[rand_exit_no2]
+        # print(f"Room: {player.current_room.id}, Exits: {player.current_room.get_exits()}, Exit: {p_exit}")
+        # traversal_path.append(p_exit)
+        # player.travel(p_exit)
+        # find_unexplored_exit(player.current_room)
+
+# def search_for_unexplored(room):
+#     q = Queue()
+#     seen = set()
+#     print(directions[room.id])
+#     for e in room.get_exits():
+#         q.enqueue([e])
+
+#     while q.size() > 0:
+#         p = q.dequeue()
+#         v = p[-1]
+
+#         if room.get_room_in_direction(v) not in seen:
+#             if room.get_room_in_direction(v) is not None:
+#                 seen.add(room.get_room_in_direction(v))
+#                 room = room.get_room_in_direction(v)
+
+#             for e in room.get_exits():
+#                 q.enqueue(p + [e])
+
+#             if check_room_for_exits(room) is True:
+#                 # print('path: ',p)
+#                 return p
+
+
+def find_unexplored_exit(room):
+    s = Stack()
+    visited = set()
+    visited.add(room.id)
+    p = []
+
+    s.push(room.id)
+
+    while s.size() > 0:
+        v = s.pop()
+        print('v: ',v)
+        print('exits: ',directions[v])
+        rand_dir = random.randrange(len(directions[v]))
+        input()
+        print('rand_dir: ',directions[v][rand_dir])
+        input()
+        p.append(v)
+
+def search_exits(room):
+    s_exits = []
+    q = Queue()
+    seen = set()
+    seen.add(room.id)
+    input(room.id)
+    for e in directions[room.id]:
+        s_exits.append(e)
+        print('direction: ',e)
+        print('room', room.get_room_in_direction(e).id)
+        
+    r_exit = random.randrange(len(s_exits))
+    search_exit = s_exits[r_exit]
+    print(search_exit)
+    q.enqueue([search_exit])
+    while q.size() > 0:
+        p = q.dequeue()
+        v = p[-1]
+
+        if v in room.get_exits() and room.get_room_in_direction(v).id in directions:
+            room = room.get_room_in_direction(v)
+
+        
+
+        if room.id not in seen:
+            seen.add(room.id)
+
+            exits = room.get_exits()
+            for e in exits:
+                if room.get_room_in_direction(e).id not in directions:
+                    print('p: ',p)
+                    return p
+                    # for d in p:
+                    #     player.travel(d)
+                    # while q.size() > 0:
+                    #     q.dequeue()
+                    #     break
+
+                if room.get_room_in_direction(e).id not in seen:
+
+                    q.enqueue(p + [e])
+                if '?' in directions[room.get_room_in_direction(e).id].values():
+                    path = p + [e]
+                    print('p: ',path)
+                    return p
+                    # traversal_path.extend(path)
+                    # for d in path:
+                    #     player.travel(d)
+                    # while q.size() > 0:
+                    #     q.dequeue()
+
+def explore(room):
+    path = []
+    exits = room.get_exits()
+    rand_exit = random.randrange(len(exits))
+    choice = exits[rand_exit]
+    path.append(choice)
+    room = room.get_room_in_direction(choice)
+    if '?' in directions[room.id].values():
+        return path
+
+    
+
+def get_unexplored_room(room_id):
+    q = Queue()
+    visited = set()
+    visited.add(room_id)
+    counter = 0
+    # print(directions[room_id])
+    for direction in directions[room_id]:
+        q.enqueue([direction])
+
+    while q.size() > 0:
+        p = q.dequeue()
+        v = p[-1]
+        counter += 1
+        # print('counter: ',counter)
+        # print('v: ',v)
+        # print('room: ', directions[room_id])
+        if v in directions[room_id]:
+            visited.add(directions[room_id][v])
+            room_id = directions[room_id][v]
+        else:
+            # print('f_path: ',p)
+            return p
+        # print('v: ',v)
+        # print('path: ',p)
+        # print('room: ',directions[room_id])
+        for direction in directions[room_id]:
+            if directions[room_id][direction] not in visited:
+                q.enqueue(p + [direction])
+
+            if directions[room_id][direction] == '?':
+                return p
+
+            if len(p) > 5:
+                return p
+
+def find_new_exit(room):
+    q = Queue()
+    seen = set()
+    for e in room.get_exits():
+        q.enqueue([e])
+
+    while q.size() > 0:
+        p = q.dequeue()
+        v = p[-1]
+
+        if directions[room.id][v] not in seen:
+            seen.add(directions[room.id][v])
+            input(directions[room.id][v])
+            room = directions[room.id][v]
+
+            for d in directions[room].get(d):
+                if directions[room][d] not in seen:
+                    q.enqueue(p + [d])
+
+                if directions[room.id][v] == '?':
+                    return p
+
